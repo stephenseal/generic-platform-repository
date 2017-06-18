@@ -1,0 +1,116 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:c="http://www.springframework.org/schema/c" xmlns:cache="http://www.springframework.org/schema/cache"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jee="http://www.springframework.org/schema/jee" xmlns:lang="http://www.springframework.org/schema/lang"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:task="http://www.springframework.org/schema/task"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+		http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+		http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.2.xsd
+		http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-3.2.xsd
+		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.2.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd">
+
+ 
+	<bean id="dataServiceChainMap" name="dataServiceChainMap" 
+		class="generic.processing.framework.service.chain.DataServiceChainMap">
+		<property name="serviceChainMap" ref="genericRestControllerServiceChainMap"></property>
+	</bean>
+	
+	<util:map id="genericRestControllerServiceChainMap" map-class="java.util.HashMap"
+			key-type="java.lang.String"
+			value-type="generic.processing.framework.service.chain.IServiceChain">
+		<entry key="GET" value-ref="getDataServiceChain" />
+		<entry key="LISTALL" value-ref="listAllDataServiceChain" />
+		<entry key="CREATE" value-ref="addDataServiceChain" />
+		<entry key="UPDATE" value-ref="updateDataServiceChain" />
+		<entry key="DELETE" value-ref="deleteDataServiceChain" />
+	</util:map>
+
+	<bean id="getDataServiceChain"
+		class="generic.processing.framework.service.chain.GetDataServiceChain">
+		<property name="name" value="getDataServiceChain" />
+		<property name="stopChainOnError" value="true" />
+		<property name="serviceChain">
+			<list>
+				<ref bean="getDataService" />
+				<ref bean="dao2dtoMapperService" />				
+			</list>
+		</property>
+	</bean>
+
+	<bean id="listAllDataServiceChain"
+		class="generic.processing.framework.service.chain.ListAllDataServiceChain">
+		<property name="name" value="listAllDataServiceChain" />
+		<property name="stopChainOnError" value="true" />
+		<property name="serviceChain">
+			<list>
+				<ref bean="listAllDataService" />
+				<ref bean="dao2dtoMapperService" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="addDataServiceChain"
+		class="generic.processing.framework.service.chain.AddDataServiceChain">
+		<property name="name" value="addDataServiceChain" />
+		<property name="stopChainOnError" value="true" />
+		<property name="serviceChain">
+			<list>
+				<ref bean="addDataValidatorService" />
+				<ref bean="dto2daoMapperService" />
+				<ref bean="addDataService" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="updateDataServiceChain"
+		class="generic.processing.framework.service.chain.UpdateDataServiceChain">
+		<property name="name" value="updateDataServiceChain" />
+		<property name="stopChainOnError" value="true" />
+		<property name="serviceChain">
+			<list>
+				<ref bean="updateDataValidatorService" />
+				<ref bean="dto2daoMapperService" />
+				<ref bean="updateDataService" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="deleteDataServiceChain"
+		class="generic.processing.framework.service.chain.DeleteDataServiceChain">
+		<property name="name" value="deleteDataServiceChain" />
+		<property name="stopChainOnError" value="true" />
+		<property name="serviceChain">
+			<list>
+				<ref bean="deleteDataValidatorService" />
+				<ref bean="dto2daoMapperService" />
+				<ref bean="deleteDataService" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="addDataValidatorService" class="generic.processing.framework.service.RulesService" />
+	<bean id="updateDataValidatorService" class="generic.processing.framework.service.RulesService" />
+	<bean id="deleteDataValidatorService" class="generic.processing.framework.service.RulesService" />
+	
+	<bean id="dto2daoMapperService" class="generic.processing.framework.service.Dto2DaoMapperService" />
+	<bean id="dao2dtoMapperService" class="generic.processing.framework.service.Dao2DtoMapperService" />	
+	
+	<bean id="addDataService" class="generic.processing.framework.service.AddDataService" />
+	<bean id="deleteDataService" class="generic.processing.framework.service.DeleteDataService" />
+	<bean id="getDataService" class="generic.processing.framework.service.GetDataService" />
+	<bean id="listAllDataService" class="generic.processing.framework.service.ListAllDataService" />
+	<bean id="updateDataService" class="generic.processing.framework.service.UpdateDataService" />
+	
+	<bean id="dao2dtomapper" class="generic.processing.framework.data.mapper.modelmapper.DataMapper">
+		<property name="packageName" value="uk.co.etapas.data.dto" />
+	</bean>
+	
+	<bean id="genericRepository" class="generic.processing.framework.data.repository.GenericRepository"/>
+	<bean id="genericDAO" class="generic.processing.framework.data.jpa.GenericDAO" />
+
+</beans>

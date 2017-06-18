@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<employee>
+	<name>Steve Seal</name>
+	<salary>105000.00</salary>
+	<designation>Vice President</designation>
+	<address>
+		<city>Brockenhurst</city>
+		<line1>80 New Forest Drive</line1>
+		<line2></line2>
+		<state>Hampshire</state>
+		<zipcode>90210</zipcode>
+	</address>
+</employee>

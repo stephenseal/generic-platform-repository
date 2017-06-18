@@ -1,0 +1,40 @@
+/**
+ * This is the routing rule DRL file.
+ *
+ * All rules fall into the same package (for sake of consistency)
+ * 
+ * @author UP779462
+ */
+package uk.co.etapas.drools.rules
+ 
+import generic.processing.framework.service.chain.IServiceChain;
+import generic.processing.framework.rulesengine.RuleExecutionResult;
+
+global java.util.List list
+
+rule "BatchITEValidation"
+    dialect "mvel"
+    when
+		sc1 : IServiceChain();    
+        eval( sc1.getName == "batchITEValidation" )
+    then
+    	list.add( new DecisionResult("", "batch.ite.enrichment.queue", ""));
+end
+
+rule "BatchITEEnrichment"
+    dialect "mvel"
+    when
+		sc2 : IServiceChain();    
+        eval( sc2.getName == "batchITEEnrichment" )
+    then
+    	list.add( new DecisionResult("", "batch.ite.figuration.queue", ""));
+end
+
+rule "BatchITEFiguration"
+    dialect "mvel"
+    when
+		sc3 : IServiceChain();    
+        eval( sc3.getName == "batchITEFiguration" )
+    then
+    	list.add( new DecisionResult("", "batch.ite.booking.queue", ""));
+end

@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+	<!-- Service Chains -->
+	<bean id="uiValidationServiceChain"
+		class="generic.processing.framework.service.chain.DefaultServiceChainExecutor">
+		<property name="stopChainOnError" value="true" />
+		<property name="name" value="uiITEValidation"/>
+		<property name="serviceChain">
+			<list>
+				<ref bean="utpInstitutionalValidation" />
+				<ref bean="utpInstitutionalEnrichment" />
+				<ref bean="utpInstitutionalFiguration" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="batchITEValidationServiceChain"
+		class="generic.processing.framework.service.chain.DefaultServiceChainExecutor">
+		<property name="name" value="batchITEValidation"/>
+		<property name="stopChainOnError" value="true" />
+		<property name="serviceChain">
+			<list>
+				<ref bean="utpInstitutionalValidation" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="batchITEEnrichmentServiceChain"
+		class="generic.processing.framework.service.chain.DefaultServiceChainExecutor">
+		<property name="stopChainOnError" value="true" />
+		<property name="name" value="batchITEEnrichment"/>		
+		<property name="serviceChain">
+			<list>
+				<ref bean="utpInstitutionalEnrichment" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="batchITEFigurationServiceChain"
+		class="generic.processing.framework.service.chain.DefaultServiceChainExecutor">
+		<property name="stopChainOnError" value="true" />
+		<property name="name" value="batchITEFiguration"/>		
+		<property name="serviceChain">
+			<list>
+				<ref bean="utpInstitutionalFiguration" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="batchITEBookingServiceChain"
+		class="generic.processing.framework.service.chain.DefaultServiceChainExecutor">
+		<property name="stopChainOnError" value="true" />
+		<property name="name" value="batchITEBooking"/>		
+		<property name="serviceChain">
+			<list>
+				<ref bean="utpInstitutionalBooking" />
+			</list>
+		</property>
+	</bean>
+
+	<!-- Institutional Trade Validation Service -->
+	<bean id="utpInstitutionalValidation"
+		class="generic.processing.framework.service.OrderedComponentService">
+		<property name="serviceComponentList">
+			<list>
+				<ref bean="stockValidator" />
+				<ref bean="settlementDateValidator" />
+				<ref bean="currencyValidator" />
+			</list>
+		</property>
+	</bean>
+
+	<!-- Institutional Trade Enrichment Service -->
+	<bean id="utpInstitutionalEnrichment"
+		class="generic.processing.framework.service.OrderedComponentService">
+		<property name="serviceComponentList">
+			<list>
+				<ref bean="enrichment1" />
+				<ref bean="enrichment2" />
+				<ref bean="enrichment3" />
+			</list>
+		</property>
+	</bean>
+
+
+	<!-- Institutional Trade Figuration Service -->
+	<bean id="utpInstitutionalFiguration"
+		class="generic.processing.framework.service.OrderedComponentService">
+		<property name="serviceComponentList">
+			<list>
+				<ref bean="figuration" />
+			</list>
+		</property>
+	</bean>
+	
+	<!-- Institutional Trade Figuration Service -->
+	<bean id="utpInstitutionalBooking"
+		class="generic.processing.framework.service.OrderedComponentService">
+		<property name="serviceComponentList">
+			<list>
+				<ref bean="booking" />
+			</list>
+		</property>
+	</bean>	
+
+	<!-- All of the Beans configured in this XML file are TRADE releated Beans -->
+
+	<!-- Validates a Currency -->
+	<bean id="currencyValidator"
+		class="generic.processing.framework.service.component.DummyServiceComponent" />
+
+	<!-- Validates a Stock -->
+	<bean id="stockValidator"
+		class="generic.processing.framework.service.component.DummyServiceComponent" />
+
+	<!-- Validates a SettlementDate -->
+	<bean id="settlementDateValidator"
+		class="generic.processing.framework.service.component.DummyServiceComponent" />
+
+
+	<!-- Enriches1 for a Trade -->
+	<bean id="enrichment1"
+		class="generic.processing.framework.service.component.DummyServiceComponent" />
+
+	<!-- Enriches2 for a Trade -->
+	<bean id="enrichment2"
+		class="generic.processing.framework.service.component.DummyServiceComponent" />
+
+	<!-- Enriches3 for a Trade -->
+	<bean id="enrichment3"
+		class="generic.processing.framework.service.component.DummyServiceComponent" />
+
+
+	<!-- Figurates a Trade -->
+	<bean id="figuration"
+		class="generic.processing.framework.service.component.DummyServiceComponent" />
+
+
+	<!-- Books a Trade -->
+	<bean id="booking"
+		class="generic.processing.framework.service.component.DummyServiceComponent" />
+		
+
+</beans>
